@@ -10,7 +10,9 @@ public class InputUtil {
         while (true) {
             System.out.print(message);
             if (scanner.hasNextInt()) {
-                return scanner.nextInt();
+                int value = scanner.nextInt();
+                scanner.nextLine();
+                return value;
             }
             System.out.println("Invalid input. Please enter an integer.");
             scanner.next();
@@ -21,7 +23,9 @@ public class InputUtil {
         while (true) {
             System.out.print(message);
             if (scanner.hasNextDouble()) {
-                return scanner.nextDouble();
+                double value = scanner.nextDouble();
+                scanner.nextLine();
+                return value;
             }
             System.out.println("Invalid input. Please enter a number.");
             scanner.next();

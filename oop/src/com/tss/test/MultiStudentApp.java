@@ -1,6 +1,6 @@
 package com.tss.test;
 
-import com.tss.model.Student;
+import com.tss.model.SingleStudent;
 import java.util.Scanner;
 
 public class MultiStudentApp {
@@ -8,7 +8,7 @@ public class MultiStudentApp {
     static Scanner scanner = new Scanner(System.in);
     static int totalStudents;
     static int currentIndex = 0;
-    static Student[] students;
+    static SingleStudent[] singleStudents;
 
     public static void main(String[] args) {
 
@@ -29,7 +29,7 @@ public class MultiStudentApp {
             }
         }
 
-        students = new Student[totalStudents];
+        singleStudents = new SingleStudent[totalStudents];
 
         while (true) {
             System.out.println("\nMain Menu:");
@@ -65,9 +65,9 @@ public class MultiStudentApp {
                         if(!checkStudents()){
                             break;
                         }
-                        Student student = findStudentById();
-                        if(student != null){
-                            double pending = student.getPendingFees();
+                        SingleStudent singleStudent = findStudentById();
+                        if(singleStudent != null){
+                            double pending = singleStudent.getPendingFees();
                             if (pending == 0) {
                                 System.out.println("No pending fees,no payment required");
                                 break;
@@ -78,7 +78,7 @@ public class MultiStudentApp {
                                 if (scanner.hasNextDouble()) {
                                     double amount = scanner.nextDouble();
                                     scanner.nextLine();
-                                    if (student.payFees(amount)) break;
+                                    if (singleStudent.payFees(amount)) break;
                                     System.out.println("Invalid payment amount.");
                                     break;
                                 } else {
@@ -96,9 +96,9 @@ public class MultiStudentApp {
                         if(!checkStudents()){
                             break;
                         }
-                        Student student = findStudentById();
-                        if (student != null) {
-                            System.out.println("Pending Fees: " + student.getPendingFees());
+                        SingleStudent singleStudent = findStudentById();
+                        if (singleStudent != null) {
+                            System.out.println("Pending Fees: " + singleStudent.getPendingFees());
                             break;
                         }
                     }
@@ -109,9 +109,9 @@ public class MultiStudentApp {
                         if(!checkStudents()){
                             break;
                         }
-                        Student student = findStudentById();
-                        if (student != null) {
-                            student.displayProfile();
+                        SingleStudent singleStudent = findStudentById();
+                        if (singleStudent != null) {
+                            singleStudent.displayProfile();
                             break;
                         }
                     }
@@ -137,23 +137,23 @@ public class MultiStudentApp {
     }
 
     private static void createNewStudent() {
-        Student student = new Student();
+        SingleStudent singleStudent = new SingleStudent();
         while (true) {
             System.out.print("Student ID: ");
             if (scanner.hasNextInt()) {
                 int id = scanner.nextInt();
                 scanner.nextLine();
 
-                Student existing = null;
+                SingleStudent existing = null;
                 for (int i = 0; i < currentIndex; i++) {
-                    if (students[i].getId() == id) {
-                        existing = students[i];
+                    if (singleStudents[i].getId() == id) {
+                        existing = singleStudents[i];
                         break;
                     }
                 }
                 if (existing != null) {
                     System.out.println("ID already exists. Please enter a different ID.");
-                } else if (student.setId(id)) {
+                } else if (singleStudent.setId(id)) {
                     break;
                 } else {
                     System.out.println("Invalid ID.");
@@ -167,14 +167,14 @@ public class MultiStudentApp {
         while (true) {
             System.out.print("Student Name: ");
             String name = scanner.nextLine();
-            if (student.setName(name)) break;
+            if (singleStudent.setName(name)) break;
             System.out.println("Invalid name.");
         }
 
         while (true) {
             System.out.print("Student Course: ");
             String course = scanner.nextLine();
-            if (student.setCourse(course)) break;
+            if (singleStudent.setCourse(course)) break;
             System.out.println("Invalid course.");
         }
 
@@ -183,7 +183,7 @@ public class MultiStudentApp {
             if (scanner.hasNextDouble()) {
                 double total = scanner.nextDouble();
                 scanner.nextLine();
-                if (student.setTotalFees(total)) break;
+                if (singleStudent.setTotalFees(total)) break;
                 System.out.println("Invalid amount.");
             } else {
                 System.out.println("Enter a number.");
@@ -196,7 +196,7 @@ public class MultiStudentApp {
             if (scanner.hasNextDouble()) {
                 double paid = scanner.nextDouble();
                 scanner.nextLine();
-                if (student.setFeesPaid(paid)) break;
+                if (singleStudent.setFeesPaid(paid)) break;
                 System.out.println("Invalid amount.");
             } else {
                 System.out.println("Enter a number.");
@@ -204,11 +204,11 @@ public class MultiStudentApp {
             }
         }
 
-        students[currentIndex] = student;
+        singleStudents[currentIndex] = singleStudent;
         System.out.println("Student added successfully!");
     }
 
-    private static Student findStudentById() {
+    private static SingleStudent findStudentById() {
         System.out.print("Enter Student ID: ");
         if (!scanner.hasNextInt()) {
             System.out.println("Invalid ID.");
@@ -218,8 +218,8 @@ public class MultiStudentApp {
         int id = scanner.nextInt();
         scanner.nextLine();
         for (int i = 0; i < currentIndex; i++) {
-            if (students[i].getId() == id) {
-                return students[i];
+            if (singleStudents[i].getId() == id) {
+                return singleStudents[i];
             }
         }
         System.out.println("Student not found.");
@@ -233,7 +233,7 @@ public class MultiStudentApp {
         }
         for (int i = 0; i < currentIndex; i++) {
             System.out.println("\nStudent " + (i + 1));
-            students[i].displayProfileTable();
+            singleStudents[i].displayProfileTable();
         }
     }
 

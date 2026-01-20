@@ -1,17 +1,28 @@
 package com.tss.model;
 
+import java.util.Random;
+
 public class Student {
 
     private int id;
-    private double feesPaid;
-    private double totalFees;
     private String name;
-    private String course;
 
-    public boolean setId(int id) {
-        if (id <= 0) return false;
-        this.id = id;
-        return true;
+    private Course[] courses = new Course[3];
+    private int courseCount = 0;
+
+    private double totalFees = 0;
+    private double feesPaid = 0;
+
+    public Student() {
+        this.id = new Random().nextInt(1,101);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public boolean setName(String name) {
@@ -21,42 +32,24 @@ public class Student {
         return true;
     }
 
-    public boolean setCourse(String course) {
-        if (course == null || course.trim().isEmpty()) return false;
-        if (!course.matches("[a-zA-Z ]+")) return false;
-        this.course = course.trim();
-        return true;
-    }
+    // MAX 3 COURSES PER STUDENT
+    public boolean addCourse(Course course) {
 
-    public boolean setFeesPaid(double feesPaid) {
-        if (feesPaid < 0) return false;
-        if (totalFees > 0 && feesPaid > totalFees) return false;
-//        if(!feesPaid.matches(regex: "[1-9]"))
-        this.feesPaid = feesPaid;
-        return true;
-    }
+        if (courseCount >= 3) {
+            System.out.println("A student can opt for maximum 3 courses only.");
+            return false;
+        }
 
-    public boolean setTotalFees(double totalFees) {
-        if (totalFees <= 0) return false;
-        if (feesPaid > totalFees) return false;
-        this.totalFees = totalFees;
-        return true;
-    }
+        for (int i = 0; i < courseCount; i++) {
+            if (courses[i].getId() == course.getId()) {
+                System.out.println("Course already opted.");
+                return false;
+            }
+        }
 
-    public int getId() {
-        return id;
-    }
-    public double getFeesPaid() {
-        return feesPaid;
-    }
-    public double getTotalFees() {
-        return totalFees;
-    }
-    public String getName() {
-        return name;
-    }
-    public String getCourse() {
-        return course;
+        courses[courseCount++] = course;
+        totalFees += course.getFees();
+        return true;
     }
 
     public boolean payFees(double amount) {
@@ -71,23 +64,23 @@ public class Student {
     }
 
     public void displayProfile() {
-        System.out.println("Student ID: " + id);
-        System.out.println("Student Name: " + name);
-        System.out.println("Student Course: " + course);
-        System.out.println("Fees Paid: " + feesPaid);
-        System.out.println("Total Fees: " + totalFees);
-    }
+        System.out.println("Student ID   : " + id);
+        System.out.println("Student Name : " + name);
+        System.out.println("Total Fees   : " + totalFees);
+        System.out.println("Fees Paid    : " + feesPaid);
+        System.out.println("Pending Fees : " + getPendingFees());
 
-    public void displayProfileTable(){
-        System.out.println("----------------------------------------------------------------------------------------");
-        System.out.printf("%-12s %-20s %-20s %-12s %-12s%n",
-                "ID", "Name", "Course", "Fees Paid", "Total Fees");
-        System.out.println("----------------------------------------------------------------------------------------");
+        if (courseCount == 0) {
+            System.out.println("No courses opted.");
+            return;
+        }
 
-        System.out.printf("%-12d %-20s %-20s %-12.2f %-12.2f%n",
-                id, name, course, feesPaid, totalFees);
+        System.out.println("\nCourses Opted:");
+        System.out.printf("%-10s %-20s %-12s %-10s%n",
+                "ID", "Name", "Fees", "Duration");
 
-        System.out.println("----------------------------------------------------------------------------------------");
-
+        for (int i = 0; i < courseCount; i++) {
+            courses[i].display();
+        }
     }
 }

@@ -1,6 +1,6 @@
 package com.tss.test;
 
-import com.tss.model.Student;
+import com.tss.model.SingleStudent;
 
 import java.util.Scanner;
 
@@ -10,14 +10,14 @@ public class MainApp {
     public static void main(String[] args) {
 
         System.out.println("Enter Student Details:");
-        Student student = new Student();
+        SingleStudent singleStudent = new SingleStudent();
 
         while (true) {
             System.out.print("Student ID: ");
             if (scanner.hasNextInt()) {
                 int id = scanner.nextInt();
                 scanner.nextLine();
-                if (student.setId(id)) break;
+                if (singleStudent.setId(id)) break;
                 System.out.println("Invalid ID. Must be positive.");
             } else {
                 System.out.println("Invalid input. Enter an integer.");
@@ -28,14 +28,14 @@ public class MainApp {
         while (true) {
             System.out.print("Student Name: ");
             String name = scanner.nextLine();
-            if (student.setName(name)) break;
+            if (singleStudent.setName(name)) break;
             System.out.println("Invalid name. Only characters allowed.");
         }
 
         while (true) {
             System.out.print("Student Course: ");
             String course = scanner.nextLine();
-            if (student.setCourse(course)) break;
+            if (singleStudent.setCourse(course)) break;
             System.out.println("Invalid course. Only characters allowed.");
         }
 
@@ -44,7 +44,7 @@ public class MainApp {
             if (scanner.hasNextDouble()) {
                 double paid = scanner.nextDouble();
                 scanner.nextLine();
-                if (student.setFeesPaid(paid)) break;
+                if (singleStudent.setFeesPaid(paid)) break;
                 System.out.println("Invalid amount.");
             } else {
                 System.out.println("Invalid input. Enter a number.");
@@ -57,7 +57,7 @@ public class MainApp {
             if (scanner.hasNextDouble()) {
                 double total = scanner.nextDouble();
                 scanner.nextLine();
-                if (student.setTotalFees(total)) break;
+                if (singleStudent.setTotalFees(total)) break;
                 System.out.println("Invalid amount.");
             } else {
                 System.out.println("Invalid input. Enter a number.");
@@ -83,10 +83,10 @@ public class MainApp {
             int choice = scanner.nextInt();
             switch (choice) {
                 case 1:
-                    student.displayProfile();
+                    singleStudent.displayProfile();
                     break;
                 case 2:
-                    double pending = student.getPendingFees();
+                    double pending = singleStudent.getPendingFees();
                     if (pending == 0) {
                         System.out.println("No pending fees,no payment required");
                         break;
@@ -96,7 +96,7 @@ public class MainApp {
                         System.out.print("Enter amount to pay: ");
                         if (scanner.hasNextDouble()) {
                             double amount = scanner.nextDouble();
-                            if (student.payFees(amount)) break;
+                            if (singleStudent.payFees(amount)) break;
                             System.out.println("Invalid payment amount.");
                         } else {
                             System.out.println("Invalid input. Enter a number.");
@@ -105,15 +105,15 @@ public class MainApp {
                     }
                     break;
                 case 3:
-                    System.out.println("Pending Fees: " + student.getPendingFees());
+                    System.out.println("Pending Fees: " + singleStudent.getPendingFees());
                     break;
                 case 4:
                     while (true) {
-                        System.out.println("Current Course:" + student.getCourse());
+                        System.out.println("Current Course:" + singleStudent.getCourse());
                         System.out.print("Enter new course: ");
                         String newCourse = scanner.next();
                         scanner.nextLine();
-                        if (student.setCourse(newCourse)) break;
+                        if (singleStudent.setCourse(newCourse)) break;
                         System.out.println("Invalid course.");
                     }
                     break;
