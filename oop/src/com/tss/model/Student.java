@@ -32,21 +32,17 @@ public class Student {
         return true;
     }
 
-    // MAX 3 COURSES PER STUDENT
     public boolean addCourse(Course course) {
-
         if (courseCount >= 3) {
             System.out.println("A student can opt for maximum 3 courses only.");
             return false;
         }
-
         for (int i = 0; i < courseCount; i++) {
             if (courses[i].getId() == course.getId()) {
                 System.out.println("Course already opted.");
                 return false;
             }
         }
-
         courses[courseCount++] = course;
         totalFees += course.getFees();
         return true;
