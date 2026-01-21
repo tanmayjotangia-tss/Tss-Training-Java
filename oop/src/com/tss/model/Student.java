@@ -25,6 +25,14 @@ public class Student {
         return name;
     }
 
+    public Course[] getCourses() {
+        return courses;
+    }
+
+//    public int getCourseCount() {
+//        return courseCount;
+//    }
+
     public boolean setName(String name) {
         if (name == null || name.trim().isEmpty()) return false;
         if (!name.matches("[a-zA-Z ]+")) return false;
@@ -79,4 +87,22 @@ public class Student {
             courses[i].display();
         }
     }
+
+//    public boolean replaceCourse(int oldCourseID,Course newCourse){
+//        for (int i = 0; i < courseCount; i++) {
+//            if(courses[i].getId()==newCourse.getId()){
+//                System.out.println("Student already opted for this code");
+//                return false;
+//            }
+//        }
+//        for (int i = 0; i < courseCount; i++) {
+//            if(courses[i].getId()==oldCourseID){
+//                totalFees-=courses[i].getFees();
+//                courses[i] = newCourse;
+//                totalFees+=courses[i].getFees();
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }

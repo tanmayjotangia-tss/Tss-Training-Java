@@ -12,23 +12,26 @@ public class StudentsApp {
     static int studentIndex = 0;
     static int courseIndex = 0;
 
+    private static final int MAX_Students=10;
+    private static final int MAX_Cources=5;
+
     public static void main(String[] args) {
         int totalStudents;
         int totalCourses;
 
-        while (true) {
-            totalStudents = InputUtil.readInt("How many students do you want to register ? ");
-            if (totalStudents >= 1 && totalStudents <= 10) break;
-            System.out.println("Enter a number between 1 and 10.");
-        }
-        while (true) {
-            totalCourses = InputUtil.readInt("How many courses do you want to register ? ");
-            if (totalCourses >= 1 && totalCourses <= 5) break;
-            System.out.println("Enter a number between 1 and 5.");
-        }
+//        while (true) {
+//            totalStudents = InputUtil.readInt("How many students do you want to register ? ");
+//            if (totalStudents >= 1 && totalStudents <= 10) break;
+//            System.out.println("Enter a number between 1 and 10.");
+//        }
+//        while (true) {
+//            totalCourses = InputUtil.readInt("How many courses do you want to register ? ");
+//            if (totalCourses >= 1 && totalCourses <= 5) break;
+//            System.out.println("Enter a number between 1 and 5.");
+//        }
 
-        students = new Student[totalStudents];
-        courses = new Course[totalCourses];
+        students = new Student[MAX_Students];
+        courses = new Course[MAX_Cources];
 
         while (true) {
             System.out.println("\nMain Menu");
@@ -40,22 +43,34 @@ public class StudentsApp {
             System.out.println("6. Display all courses");
             System.out.println("7. Pay Fees");
             System.out.println("8. View Pending Fees");
-            System.out.println("9. Update course");
-            System.out.println("10. Exit");
+//            System.out.println("9. Update course");
+//            System.out.println("10. Update student course");
+            System.out.println("0. Exit");
 
             int choice = InputUtil.readInt("Enter your choice: ");
 
             switch (choice) {
-                case 1: addStudent(); break;
-                case 2: addCourse(); break;
-                case 3: assignCourseToStudent(); break;
-                case 4: displayStudent(); break;
-                case 5: displayAllStudents(); break;
-                case 6: displayAllCourses(); break;
-                case 7: payFees(); break;
-                case 8: viewPendingFees(); break;
-                case 9: updateCourse(); break;
-                case 10:
+                case 1: addStudent();
+                        break;
+                case 2: addCourse();
+                        break;
+                case 3: assignCourseToStudent();
+                        break;
+                case 4: displayStudent();
+                        break;
+                case 5: displayAllStudents();
+                        break;
+                case 6: displayAllCourses();
+                        break;
+                case 7: payFees();
+                        break;
+                case 8: viewPendingFees();
+                        break;
+//                case 9: updateCourse();
+//                        break;
+//                case 10: updateStudentCourse();
+//                        break;
+                case 0:
                     System.out.println("Exiting...");
                     return;
                 default:
@@ -76,7 +91,7 @@ public class StudentsApp {
             System.out.println("Invalid name.");
         }
         students[studentIndex++] = student;
-        System.out.println("Student added. ID: " + student.getId());
+        System.out.println("Student added");
     }
 
     private static Student findStudentById() {
@@ -111,6 +126,10 @@ public class StudentsApp {
 
         while (true) {
             String name = InputUtil.readString("Course Name: ");
+            if (isCourseNameExists(name)) {
+                System.out.println("Course with this name already exists. Please enter a different name.");
+                continue;
+            }
             if (course.setName(name)) break;
             System.out.println("Invalid name.");
         }
@@ -128,8 +147,18 @@ public class StudentsApp {
         }
 
         courses[courseIndex++] = course;
-        System.out.println("Course added. ID: " + course.getId());
+        System.out.println("Course added.");
     }
+
+    private static boolean isCourseNameExists(String name) {
+        for (int i = 0; i < courseIndex; i++) {
+            if (courses[i].getName().equalsIgnoreCase(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private static Course findCourseById() {
         if (courseIndex == 0) {
@@ -147,7 +176,7 @@ public class StudentsApp {
             int id = InputUtil.readInt("Enter Course ID: ");
             for (int i = 0; i < courseIndex; i++) {
                 if (courses[i].getId() == id) {
-                    return courses[i];   // ✅ valid → exit method
+                    return courses[i];
                 }
             }
             System.out.println("Invalid Course ID. Please try again.");
@@ -221,27 +250,82 @@ public class StudentsApp {
             System.out.println("Pending Fees: " + s.getPendingFees());
     }
 
-    private static void updateCourse() {
-        Course c = findCourseById();
-        if (c == null) return;
-
-        while (true) {
-            String name = InputUtil.readString("New Course Name: ");
-            if (c.setName(name)) break;
-            System.out.println("Invalid name.");
-        }
-
-        while (true) {
-            double fees = InputUtil.readDouble("New Fees: ");
-            if (c.setFees(fees)) break;
-            System.out.println("Invalid fees.");
-        }
-
-        while (true) {
-            int duration = InputUtil.readInt("New Duration: ");
-            if (c.setDuration(duration)) break;
-            System.out.println("Invalid duration.");
-        }
-        System.out.println("Course updated successfully.");
-    }
+//    private static void updateCourse() {
+//        Course c = findCourseById();
+//        if (c == null) return;
+//
+//
+//        while (true) {
+//            double fees = InputUtil.readDouble("New Fees: ");
+//            if (c.setFees(fees)) break;
+//            System.out.println("Invalid fees.");
+//        }
+//
+//        while (true) {
+//            int duration = InputUtil.readInt("New Duration: ");
+//            if (c.setDuration(duration)) break;
+//            System.out.println("Invalid duration.");
+//        }
+//        System.out.println("Course updated successfully.");
+//    }
+//    private static void updateStudentCourse(){
+//
+//        if(studentIndex==0){
+//            System.out.println("No student available");
+//            return;
+//        }
+//        Student student = findStudentById();
+//        if(student==null)return;
+//        if(student.getCourseCount()==0){
+//            System.out.println("The student has not opted for any course");
+//            return;
+//        }
+//
+//        System.out.println("\nCourses opted by the student");
+//        System.out.printf("%-10s %-20s %-12s %-10s%n","ID","Name","Fees","Duration");
+//        Course[] studentCourse = student.getCourses();
+//
+//        int studentCourseCount = student.getCourseCount();
+//
+//        for (int i = 0; i < studentCourseCount; i++) {
+//            studentCourse[i].display();
+//        }
+//
+//        int oldCourseId;
+//        while(true){
+//            oldCourseId=InputUtil.readInt("Enter the course ID to replace");
+//            boolean found=false;
+//
+//            for (int i = 0; i < studentCourseCount; i++) {
+//                if(studentCourse[i].getId()==oldCourseId){
+//                    found=true;
+//                    break;
+//                }
+//            }
+//            if(found)break;
+//            System.out.println("Invalid Course Id,please try again");
+//        }
+//
+//        System.out.println("\nAvailable Courses in system");
+//        System.out.printf("%-10s %-20s %-12s %-10s%n","ID","Name","Fees","Duration");
+//        for (int i = 0; i < courseIndex; i++) {
+//            courses[i].display();
+//        }
+//
+//        Course newCourse = null;
+//        while(true){
+//            int newCourseId=InputUtil.readInt("Enter new Course ID to assign:");
+//            for (int i = 0; i < courseIndex; i++) {
+//                if(courses[i].getId()==newCourseId){
+//                    newCourse=courses[i];
+//                    break;
+//                }
+//            }
+//            if(newCourse!=null)break;
+//            System.out.println("Invalid Course ID,Please Try again");
+//            }
+//        if(student.replaceCourse(oldCourseId,newCourse)){
+//            System.out.println("Course Replaced");
+//        }
+//    }
 }
