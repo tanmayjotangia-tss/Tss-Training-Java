@@ -4,6 +4,8 @@ import com.tss.model.Course;
 import com.tss.model.Student;
 import com.tss.utils.InputUtil;
 
+import java.util.Scanner;
+
 public class StudentsApp {
 
     static Student[] students;
@@ -15,9 +17,9 @@ public class StudentsApp {
     private static final int MAX_Students=10;
     private static final int MAX_Cources=5;
 
-    public static void main(String[] args) {
-        int totalStudents;
-        int totalCourses;
+    static Scanner scanner = new Scanner(System.in);
+
+    static void main(String[] args) {
 
 //        while (true) {
 //            totalStudents = InputUtil.readInt("How many students do you want to register ? ");
@@ -50,10 +52,46 @@ public class StudentsApp {
             int choice = InputUtil.readInt("Enter your choice: ");
 
             switch (choice) {
-                case 1: addStudent();
-                        break;
-                case 2: addCourse();
-                        break;
+                case 1: {
+                    boolean createMore = true;
+                    while (createMore) {
+                        addStudent();
+                        String nextStudent;
+                        while (true) {
+                            System.out.print("Add next student? (yes/no): ");
+                            nextStudent = scanner.nextLine().trim();
+                            if (nextStudent.equalsIgnoreCase("yes")) {
+                                break;
+                            } else if (nextStudent.equalsIgnoreCase("no")) {
+                                createMore = false;
+                                break;
+                            } else {
+                                System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+                            }
+                        }
+                    }
+                    break;
+                }
+                case 2:{
+                    boolean createMore = true;
+                    while (createMore) {
+                        addCourse();
+                        String nextCourse;
+                        while (true) {
+                            System.out.print("Add next course? (yes/no): ");
+                            nextCourse = scanner.nextLine().trim();
+                            if (nextCourse.equalsIgnoreCase("yes")) {
+                                break;
+                            } else if (nextCourse.equalsIgnoreCase("no")) {
+                                createMore = false;
+                                break;
+                            } else {
+                                System.out.println("Invalid input. Please enter 'yes' or 'no'.");
+                            }
+                        }
+                    }
+                    break;
+                }
                 case 3: assignCourseToStudent();
                         break;
                 case 4: displayStudent();
@@ -85,6 +123,7 @@ public class StudentsApp {
             return;
         }
         Student student = new Student();
+        student.generateStudentId(students,studentIndex);
         while (true) {
             String name = InputUtil.readString("Student Name: ");
             if (student.setName(name)) break;
@@ -123,6 +162,7 @@ public class StudentsApp {
             return;
         }
         Course course = new Course();
+        course.generateCourseId(courses,courseIndex);
 
         while (true) {
             String name = InputUtil.readString("Course Name: ");
@@ -184,12 +224,19 @@ public class StudentsApp {
     }
 
     private static void assignCourseToStudent() {
+        if (courseIndex == 0) {
+            System.out.println("No courses available. Create a course first.");
+            return;
+        }
         Student student = findStudentById();
         if (student == null) return;
-        Course course = findCourseById();
-        if (course == null) return;
-        if (student.addCourse(course)) {
-            System.out.println("Course assigned successfully.");
+        while(true){
+            Course course = findCourseById();
+            if (course == null) return;
+            if (student.addCourse(course)) {
+                System.out.println("Course assigned successfully.");
+                break;
+            }
         }
     }
 
@@ -221,34 +268,49 @@ public class StudentsApp {
     }
 
     private static void payFees() {
-        if (studentIndex == 0) {
-            System.out.println("No students registered yet.");
-            return;
-        }
         Student student = findStudentById();
         if (student == null) return;
-        double pending = student.getPendingFees();
-        if (pending == 0) {
-            System.out.println("No pending fees, no payment required.");
+
+        if (student.getCourseCount() == 0) {
+            System.out.println("No courses opted.");
+            return;
+        }
+        student.displayProfile();
+        while (true) {
+            int courseId = InputUtil.readInt("Enter Course ID to pay fees: ");
+            double pending = student.getPendingFees(courseId);
+            if (pending < 0) {
+                System.out.println("Invalid Course ID.");
+                continue;
+            }
+            if (pending == 0) {
+                System.out.println("No pending fees for this course.");
+                return;
+            }
+            System.out.println("Pending Fees: " + pending);
+            while (true) {
+                double amount = InputUtil.readDouble("Enter amount to pay: ");
+                if (student.payFees(courseId, amount)) {
+                    System.out.println("Payment successful.");
+                    return;
+                }
+                System.out.println("Invalid payment amount.");
+            }
+        }
+    }
+
+
+    private static void viewPendingFees() {
+        Student student = findStudentById();
+        if (student == null) return;
+        if (student.getCourseCount() == 0) {
+            System.out.println("No courses opted.");
             return;
         }
 
-        while (true) {
-            System.out.println("Pending Fees: " + pending);
-            double amount = InputUtil.readDouble("Enter amount to pay: ");
-            if (student.payFees(amount)) {
-                System.out.println("Payment successful.");
-                return;
-            }
-            System.out.println("Invalid payment amount. Please try again.");
-        }
+        student.displayProfile();
     }
 
-    private static void viewPendingFees() {
-        Student s = findStudentById();
-        if (s != null)
-            System.out.println("Pending Fees: " + s.getPendingFees());
-    }
 
 //    private static void updateCourse() {
 //        Course c = findCourseById();

@@ -9,8 +9,25 @@ public class Course {
     private double fees;
     private int duration;
 
-    public Course() {
-        this.id = new Random().nextInt(0,101);
+    public void generateCourseId(Course[] courses, int courseCount) {
+        Random random = new Random();
+
+        while (true) {
+            int generatedId = random.nextInt(100) + 1;
+            boolean exists = false;
+
+            for (int i = 0; i < courseCount; i++) {
+                if (courses[i].getId() == generatedId) {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (!exists) {
+                this.id = generatedId;
+                return;
+            }
+        }
     }
 
     public int getId() {
