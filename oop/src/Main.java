@@ -1,4 +1,4 @@
-import com.tss.model.Box;
+import com.tss.day6.model.Box;
 
 import java.util.Scanner;
 
