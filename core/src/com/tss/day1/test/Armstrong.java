@@ -8,7 +8,6 @@ public class Armstrong {
         System.out.println("Enter the number to check if it is an Armstrong number or not");
         int number = scanner.nextInt();
 
-        //Length Calculation
         int length = 0;
         int temp = number;
         while(temp>0){

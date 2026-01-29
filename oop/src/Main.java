@@ -3,7 +3,7 @@ import com.tss.day6.model.Box;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the dimentions of Box1:");
         double box1Width= scanner.nextDouble();
