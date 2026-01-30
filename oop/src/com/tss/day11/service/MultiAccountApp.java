@@ -1,5 +1,7 @@
 package com.tss.day11.service;
 
+import com.tss.day11.exceptions.MinimumBalanceException;
+import com.tss.day11.exceptions.NegativeAmountException;
 import com.tss.day11.model.Account;
 import com.tss.day11.model.SavingAccount;
 import com.tss.day11.model.CurrentAccount;
@@ -44,69 +46,94 @@ public class MultiAccountApp {
                     }break;
 
                 case 2:
-                        Account depAccount = selectAccount();
-                        if (depAccount == null) {
-                            break;
-                        }
-
-                        while (true) {
-                            double amount = InputUtil.readDouble("Enter amount to deposit: ");
-
-                            if (amount > 0) {
-                                depAccount.deposit(amount);
-                                System.out.println("Deposit successful!");
-                                break;
-                            }
-                            System.out.println("Enter valid amount");
-                        }
+                    Account depAccount = selectAccount();
+                    if (depAccount == null) {
                         break;
+                    }
+//
+//                        while (true) {
+//                            double amount = InputUtil.readDouble("Enter amount to deposit: ");
+//
+//                            if (amount > 0) {
+//                                depAccount.deposit(amount);
+//                                System.out.println("Deposit successful!");
+//                                break;
+//                            }
+//                            System.out.println("Enter valid amount");
+//                        }
+//                        break;
+
+                    while (true) {
+                        try {
+                            double amount = InputUtil.readDouble("Enter amount to deposit: ");
+                            depAccount.deposit(amount);
+                            System.out.println("Deposit successful!");
+                            break;
+                        } catch (NegativeAmountException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                    break;
 
                 case 3:
-                        Account withAccount = selectAccount();
-                        if (withAccount == null) {
-                            break;
-                        }
-                        while (true) {
+                    Account withAccount = selectAccount();
+                    if (withAccount == null) {
+                        break;
+                    }
+//                        while (true) {
+//                            System.out.println("Current Balance: " + withAccount.getBalance());
+//                            double amount = InputUtil.readDouble("Enter amount to withdraw: ");
+//                            if (amount <= 0) {
+//                                System.out.println("Enter a valid amount");
+//                            } else if (amount > withAccount.getBalance()) {
+//                                System.out.println("Insufficient balance!");
+//                            } else if (withAccount instanceof CurrentAccount &&
+//                                    withAccount.getBalance() - amount < CurrentAccount.MIN_BALANCE) {
+//                                System.out.println("Enter valid amount (cannot go below minimum balance)");
+//                            } else {
+//                                withAccount.withdraw(amount);
+//                                System.out.println("Withdrawal successful!");
+//                                break;
+//                            }
+//                        }
+//                        break;
+
+                    while (true) {
+                        try {
                             System.out.println("Current Balance: " + withAccount.getBalance());
                             double amount = InputUtil.readDouble("Enter amount to withdraw: ");
-                            if (amount <= 0) {
-                                System.out.println("Enter a valid amount");
-                            } else if (amount > withAccount.getBalance()) {
-                                System.out.println("Insufficient balance!");
-                            } else if (withAccount instanceof CurrentAccount &&
-                                    withAccount.getBalance() - amount < CurrentAccount.MIN_BALANCE) {
-                                System.out.println("Enter valid amount (cannot go below minimum balance)");
-                            } else {
-                                withAccount.withdraw(amount);
-                                System.out.println("Withdrawal successful!");
-                                break;
-                            }
+                            withAccount.withdraw(amount);
+                            System.out.println("Withdrawal successful!");
+                            break;
+                        } catch (NegativeAmountException | MinimumBalanceException e) {
+                            System.out.println(e.getMessage());
                         }
-                        break;
+                    }
+                    break;
 
                 case 4:
-                        Account balAccount = selectAccount();
-                        if (balAccount != null) {
-                            System.out.println("Current Balance: " + balAccount.getBalance());
-                            break;
-                        }
+                    Account balAccount = selectAccount();
+                    if (balAccount != null) {
+                        System.out.println("Current Balance: " + balAccount.getBalance());
+                        break;
+                    }
                     break;
 
                 case 5:
-                        Account detailsAccount = selectAccount();
-                        if (detailsAccount != null) {
-                            detailsAccount.displayAccount();
-                            break;
-                        }
+                    Account detailsAccount = selectAccount();
+                    if (detailsAccount != null) {
+                        detailsAccount.displayAccount();
+                        break;
+                    }
                     break;
 
                 case 6:
-                        if (accountCount < 2) {
-                            System.out.println("Create minimum number of accounts first");
-                        } else {
-                            transferAmount();
-                        }
-                        break;
+                    if (accountCount < 2) {
+                        System.out.println("Create minimum number of accounts first");
+                    } else {
+                        transferAmount();
+                    }
+                    break;
 
                 case 7:
                     System.out.println("Exiting...");
@@ -136,33 +163,61 @@ public class MultiAccountApp {
         }
     }
 
-    private static SavingAccount createSavingAccount() {
-        String name = InputUtil.readValidName("Enter Account Holder Name: ");
-        double balance;
+//    private static SavingAccount createSavingAccount() {
+//        String name = InputUtil.readValidName("Enter Account Holder Name: ");
+//        double balance;
+//
+//        while (true) {
+//            balance = InputUtil.readDouble("Enter current balance:");
+//            if (balance >= 0) {
+//                break;
+//            }
+////            System.out.println("Invalid balance! Balance cannot be negative.");
+//            throw new NegativeAmountException(balance);
+//        }
+//        return new SavingAccount(name, balance);
+//    }
 
-        while (true) {
-            balance = InputUtil.readDouble("Enter current balance:");
-            if (balance >= 0) {
-                break;
-            }
-            System.out.println("Invalid balance! Balance cannot be negative.");
+private static SavingAccount createSavingAccount() {
+    String name = InputUtil.readValidName("Enter Account Holder Name: ");
+
+    while (true) {
+        try {
+            double balance = InputUtil.readDouble("Enter current balance:");
+            return new SavingAccount(name, balance);
+        } catch (NegativeAmountException e) {
+            System.out.println(e.getMessage());
         }
-        return new SavingAccount(name, balance);
     }
+}
 
+//    private static CurrentAccount createCurrentAccount() {
+//        String name = InputUtil.readValidName("Enter Account Holder Name: ");
+//        double balance;
+//        while (true) {
+//            balance = InputUtil.readDouble("Enter current balance:");
+//            if (balance >= CurrentAccount.MIN_BALANCE) {
+//                break;
+//            }
+////            System.out.println("Enter valid balance (minimum " + CurrentAccount.MIN_BALANCE + ")");
+//            throw new MinimumBalanceException(balance);
+//        }
+//        return new CurrentAccount(name, balance);
+//    }
 
-    private static CurrentAccount createCurrentAccount() {
-        String name = InputUtil.readValidName("Enter Account Holder Name: ");
-        double balance;
-        while (true) {
-            balance = InputUtil.readDouble("Enter current balance:");
-            if (balance >= CurrentAccount.MIN_BALANCE) {
-                break;
-            }
-            System.out.println("Enter valid balance (minimum " + CurrentAccount.MIN_BALANCE + ")");
+private static CurrentAccount createCurrentAccount() {
+    String name = InputUtil.readValidName("Enter Account Holder Name: ");
+
+    while (true) {
+        try {
+            double balance = InputUtil.readDouble("Enter current balance:");
+            return new CurrentAccount(name, balance);
+        } catch (MinimumBalanceException | NegativeAmountException e) {
+            System.out.println(e.getMessage());
         }
-        return new CurrentAccount(name, balance);
     }
+}
+
 
     private static Account selectAccount() {
         if (accountCount == 0) {
@@ -187,49 +242,84 @@ public class MultiAccountApp {
         return null;
     }
 
-    private static void transferAmount() {
-        System.out.println("Select Sender Account:");
-        Account sender = selectAccount();
-        if (sender == null) {
-            return;
-        }
-        Account receiver;
-        while (true) {
-            System.out.println("Select Receiver Account:");
-            receiver = selectAccount();
+//    private static void transferAmount() {
+//        System.out.println("Select Sender Account:");
+//        Account sender = selectAccount();
+//        if (sender == null) {
+//            return;
+//        }
+//        Account receiver;
+//        while (true) {
+//            System.out.println("Select Receiver Account:");
+//            receiver = selectAccount();
+//
+//            if (receiver == null) {
+//                return;
+//            }
+//            if (sender == receiver) {
+//                System.out.println("Self transfer not possible! Please select a different receiver account.");
+//            } else {
+//                break;
+//            }
+//        }
+//
+//        double amount;
+//        while (true) {
+//            System.out.println("Sender's current balance: " + sender.getBalance());
+//            amount = InputUtil.readDouble("Enter amount to transfer: ");
+//
+//            if (amount <= 0) {
+////                System.out.println("Invalid amount! Enter a positive value.");
+//                throw new NegativeAmountException(amount);
+//            }
+//            else if (amount > sender.getBalance()) {
+////                System.out.println("Insufficient balance!");
+//                throw new MinimumBalanceException(amount);
+//            }
+//            else if (sender instanceof CurrentAccount &&
+//                    sender.getBalance() - amount < CurrentAccount.MIN_BALANCE) {
+////                System.out.println("Transfer not allowed! Minimum balance rule violated.");
+//                throw new MinimumBalanceException(amount);
+//            }
+//            else {
+//                break;
+//            }
+//        }
+//        sender.withdraw(amount);
+//        receiver.deposit(amount);
+//        System.out.println("Transfer successful!");
+//    }
 
-            if (receiver == null) {
-                return;
-            }
-            if (sender == receiver) {
-                System.out.println("Self transfer not possible! Please select a different receiver account.");
-            } else {
-                break;
-            }
-        }
+private static void transferAmount() {
+    System.out.println("Select Sender Account:");
+    Account sender = selectAccount();
+    if (sender == null) return;
 
-        double amount;
-        while (true) {
-            System.out.println("Sender's current balance: " + sender.getBalance());
-            amount = InputUtil.readDouble("Enter amount to transfer: ");
+    Account receiver;
+    while (true) {
+        System.out.println("Select Receiver Account:");
+        receiver = selectAccount();
+        if (receiver == null) return;
 
-            if (amount <= 0) {
-                System.out.println("Invalid amount! Enter a positive value.");
-            }
-            else if (amount > sender.getBalance()) {
-                System.out.println("Insufficient balance!");
-            }
-            else if (sender instanceof CurrentAccount &&
-                    sender.getBalance() - amount < CurrentAccount.MIN_BALANCE) {
-                System.out.println("Transfer not allowed! Minimum balance rule violated.");
-            }
-            else {
-                break;
-            }
-        }
-        sender.withdraw(amount);
-        receiver.deposit(amount);
-        System.out.println("Transfer successful!");
+        if (sender != receiver) break;
+        System.out.println("Self transfer not allowed!");
     }
+    while (true) {
+        try {
+            System.out.println("Sender Balance: " + sender.getBalance());
+            double amount = InputUtil.readDouble("Enter amount to transfer:");
+
+            sender.withdraw(amount);
+            receiver.deposit(amount);
+
+            System.out.println("Transfer successful!");
+            break;
+
+        } catch (NegativeAmountException | MinimumBalanceException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+}
+
 
 }

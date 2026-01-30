@@ -1,6 +1,9 @@
 package com.tss.day11.model;
 
 
+import com.tss.day11.exceptions.MinimumBalanceException;
+import com.tss.day11.exceptions.NegativeAmountException;
+
 public class SavingAccount extends Account{
 //    private double offerRate;
     private final double OFFER_RATE=0.5;
@@ -12,8 +15,7 @@ public class SavingAccount extends Account{
 
     public void deposit(double amount) {
         if (amount <= 0) {
-            System.out.println("Enter valid amount");
-            return;
+            throw new NegativeAmountException(amount);
         }
         double interest = 0;
         if (amount > 50000) {
@@ -27,14 +29,13 @@ public class SavingAccount extends Account{
 
     public void withdraw(double amount) {
         if (amount <= 0) {
-            System.out.println("Enter valid amount");
-            return;
+            throw new NegativeAmountException(amount);
         }
         if (amount <= getBalance()) {
             setBalance(getBalance() - amount);
 //            System.out.println("Withdraw Successful");
         } else {
-            System.out.println("Insufficient balance");
+            throw new MinimumBalanceException(amount);
         }
     }
 

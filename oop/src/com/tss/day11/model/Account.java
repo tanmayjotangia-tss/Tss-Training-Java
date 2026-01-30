@@ -1,5 +1,7 @@
 package com.tss.day11.model;
 
+import com.tss.day11.exceptions.NegativeAmountException;
+
 import java.util.Random;
 
 public abstract  class Account {
@@ -11,6 +13,9 @@ public abstract  class Account {
     public Account(String name,double balance){
         Account.id++;
         generateAccountNumber();
+        if(balance < 0){
+            throw new NegativeAmountException(balance);
+        }
         this.balance=balance;
         this.name=name;
 
@@ -33,6 +38,9 @@ public abstract  class Account {
     }
 
     public void setBalance(double balance) {
+        if(balance < 0){
+            throw new NegativeAmountException(balance);
+        }
         this.balance = balance;
     }
 
