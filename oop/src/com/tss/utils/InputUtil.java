@@ -84,7 +84,7 @@ public class InputUtil {
     public static boolean readBoolean(String message) {
         while (true) {
             System.out.print(message);
-            String input = scanner.nextLine().trim().toLowerCase();
+            String input = scanner.nextLine().trim().replace(" ","").toLowerCase();
 
             if (input.equals("true") || input.equals("yes") || input.equals("y")) {
                 return true;

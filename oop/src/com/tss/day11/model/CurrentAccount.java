@@ -17,7 +17,11 @@ public class CurrentAccount extends Account{
             if(amount <0){
                 throw new NegativeAmountException(amount);
             }
+            double balanceBefore = getBalance();
             setBalance(getBalance()+amount);
+            Transaction transaction = new Transaction("Deposit",0,getAccountNumber(),amount,balanceBefore,getBalance());
+            addTransaction(transaction);
+
 //            System.out.println("Amount deposited successfully !!");
 
     }
@@ -37,10 +41,13 @@ public class CurrentAccount extends Account{
                 if (amount <= 0) {
                     throw new NegativeAmountException(amount);
                 }
+                double balanceBefore=getBalance();
                 double balanceAfter = getBalance() - amount;
                 if (balanceAfter < MIN_BALANCE) {
                     throw new MinimumBalanceException(balanceAfter);
                 }
                 setBalance(balanceAfter);
+                Transaction transaction = new Transaction("Withdraw",getAccountNumber(),0,amount,balanceBefore,getBalance());
+                addTransaction(transaction);
             }
     }

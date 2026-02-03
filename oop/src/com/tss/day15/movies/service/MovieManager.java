@@ -14,13 +14,10 @@ public class MovieManager {
     protected static final int MAX_MOVIES=5;
     private static final String MOVIE_PATH="data.bin";
 
-    public MovieManager() {
-    }
 
     static {
         loadMovies();
     }
-
 
     protected static void loadMovies() {
         File file = new File(MOVIE_PATH);
@@ -56,8 +53,6 @@ public class MovieManager {
     protected static void saveMovies(){
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(MOVIE_PATH))) {
             oos.writeObject(moviesList);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,9 +61,9 @@ public class MovieManager {
         clearMovies();
         saveMovies();
     }
-    public static boolean isFull() {
-        return moviesList != null && moviesList.size() >= MAX_MOVIES;
-    }
+//    public static boolean isFull() {
+//        return moviesList != null && moviesList.size() >= MAX_MOVIES;
+//    }
     protected static Movie findMovieById(int movieId) {
         if (moviesList == null || moviesList.isEmpty()) {
             throw new NoSuchMovieFoundException("No movies available");

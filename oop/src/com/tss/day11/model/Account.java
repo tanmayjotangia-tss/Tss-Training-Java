@@ -2,22 +2,27 @@ package com.tss.day11.model;
 
 import com.tss.day11.exceptions.NegativeAmountException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public abstract  class Account {
-    private static int id;
+    private static int idCounter=0;
+    private int accountId;
     private int accountNumber;
     private double balance;
     private String name;
+    private List<Transaction> transactions;
 
     public Account(String name,double balance){
-        Account.id++;
+        this.accountId=++idCounter;
         generateAccountNumber();
         if(balance < 0){
             throw new NegativeAmountException(balance);
         }
         this.balance=balance;
         this.name=name;
+        transactions=new ArrayList<Transaction>();
 
     }
 
@@ -25,8 +30,8 @@ public abstract  class Account {
         return name;
     }
 
-    public static int getId() {
-        return id;
+    public int getId() {
+        return accountId;
     }
 
     public double getBalance() {
@@ -59,4 +64,30 @@ public abstract  class Account {
         System.out.println("Account Holder Name: " + getName());
         System.out.println("Current Balance: " + getBalance());
     }
+
+    public void addTransaction(Transaction transaction){
+        transactions.add(transaction);
+    }
+
+    public void showTransactions() {
+        if (transactions.isEmpty()) {
+            System.out.println("No Transactions Found");
+            return;
+        }
+
+        Transaction.printTableHeader();
+        for (Transaction t : transactions) {
+            t.printTableRow();
+        }
+        System.out.println("-----------------------------------------------------------------------------------------");
+    }
+
+    public void increaseBalance(double amount) {
+        this.balance += amount;
+    }
+
+    public void decreaseBalance(double amount) {
+        this.balance -= amount;
+    }
+
 }

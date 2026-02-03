@@ -4,13 +4,8 @@ import com.tss.day15.movies.exception.CapacityFullException;
 import com.tss.day15.movies.model.Movie;
 import com.tss.utils.InputUtil;
 
-import static com.tss.day15.movies.service.MovieManager.*;
-
 public class MovieController {
-    private static MovieManager manager;
 
-    public MovieController() {
-    }
 
     public void start() {
 
@@ -19,7 +14,8 @@ public class MovieController {
             int choice = InputUtil.readInt("Enter your choice: ");
 
             switch (choice) {
-                case 1 -> displayMovies();
+                case 0 -> displayMovieList();
+                case 1 -> displayMoviesFromFile();
                 case 2 -> addMovies();
                 case 3 -> deleteAllMovies();
                 case 4 -> viewMovieById();
@@ -38,8 +34,9 @@ public class MovieController {
     }
 
     private static void displayMenu() {
-        System.out.println("Movie Management System");
-        System.out.println("1. Display Movies");
+        System.out.println("\nMovie Management System");
+        System.out.println("0. Display MovieList");
+        System.out.println("1. Display Movies from File");
         System.out.println("2. Add Movie");
         System.out.println("3. Delete All Movies");
         System.out.println("4. View Movie By ID");
@@ -61,15 +58,27 @@ public class MovieController {
                 MovieManager.addMovie(movieName, movieYear, movieGenre);
                 System.out.println("Movie added successfully!!");
 
-                if(!InputUtil.createNext()) break;
-
+                if(!InputUtil.createNext()) return;
             }
         } catch (CapacityFullException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    private void displayMovies() {
+    private void displayMoviesFromFile() {
+        loadMovieFromList();
+        if (MovieManager.getMovies() == null || MovieManager.getMovies().isEmpty()) {
+            System.out.println("No movies found");
+            return;
+        }
+        System.out.println("---- Movie List Present in File ----");
+        for (Movie movie : MovieManager.getMovies()) {
+            System.out.println(movie);
+            System.out.println("--------------------");
+        }
+    }
+
+    private void displayMovieList() {
         if (MovieManager.getMovies() == null || MovieManager.getMovies().isEmpty()) {
             System.out.println("No movies found");
             return;

@@ -17,12 +17,18 @@ public class SavingAccount extends Account{
         if (amount <= 0) {
             throw new NegativeAmountException(amount);
         }
+        double balanceBefore=getBalance();
         double interest = 0;
+        double finalAmount=amount;
         if (amount > 50000) {
             interest = amount * OFFER_RATE / 100;
+            finalAmount+=interest;
             System.out.println("Offer Interest Added: " + interest);
         }
-        setBalance(getBalance() + amount + interest);
+        setBalance(getBalance() +finalAmount);
+
+        Transaction transaction = new Transaction("Deposit",0,getAccountNumber(),amount,balanceBefore,getBalance());
+        addTransaction(transaction);
 //        System.out.println("Deposit successful.");
     }
 
@@ -31,8 +37,11 @@ public class SavingAccount extends Account{
         if (amount <= 0) {
             throw new NegativeAmountException(amount);
         }
+        double balanceBefore=getBalance();
         if (amount <= getBalance()) {
             setBalance(getBalance() - amount);
+            Transaction transaction = new Transaction("Withdraw",getAccountNumber(),0,amount,balanceBefore,getBalance());
+            addTransaction(transaction);
 //            System.out.println("Withdraw Successful");
         } else {
             throw new MinimumBalanceException(amount);
