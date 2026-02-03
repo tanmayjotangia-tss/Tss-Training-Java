@@ -10,76 +10,137 @@ public class MovieController {
     private static MovieManager manager;
 
     public MovieController() {
-        manager = new MovieManager();
     }
 
-    public void start(){
+    public void start() {
 
-        while(true){
+        while (true) {
             displayMenu();
             int choice = InputUtil.readInt("Enter your choice: ");
-            switch(choice){
-                case 1: displayMovies();
-                    break;
-                case 2: addMovies();
-                    break;
-                case 3: deleteAllMovies();
-                    break;
-                case 4:
-                    System.out.println("Exiting....");
+
+            switch (choice) {
+                case 1 -> displayMovies();
+                case 2 -> addMovies();
+                case 3 -> deleteAllMovies();
+                case 4 -> viewMovieById();
+                case 5 -> updateMovieById();
+                case 6 -> deleteMovieById();
+                case 7 -> clearMovieList();
+                case 8 -> loadMovieFromList();
+                case 9 -> saveMovieOnFile();
+                case 10 -> {
+                    System.out.println("Exiting...");
                     return;
-                default:
-                    System.out.println("Enter Valid choice");
+                }
+                default -> System.out.println("Enter valid choice");
             }
         }
     }
 
-    private void deleteAllMovies() {
-        manager.deleteAll();
+    private static void displayMenu() {
+        System.out.println("Movie Management System");
+        System.out.println("1. Display Movies");
+        System.out.println("2. Add Movie");
+        System.out.println("3. Delete All Movies");
+        System.out.println("4. View Movie By ID");
+        System.out.println("5. Update Movie By ID");
+        System.out.println("6. Delete Movie By ID");
+        System.out.println("7. Clear List");
+        System.out.println("8. Load Movies from File");
+        System.out.println("9. Save Movie to File");
+        System.out.println("10. Exit");
     }
 
     private void addMovies() {
-        if (MovieManager.isFull()) {
-            System.out.println("Movie list is full. Please delete some movies first.");
-            return;
-        }
-
-        int movieId = InputUtil.readInt("Enter movie id: ");
-        String movieName = InputUtil.readString("Enter movie name: ");
-        int movieYear = InputUtil.readInt("Enter movie release year: ");
-        String movieGenre = InputUtil.readString("Enter movie genre: ");
-
         try {
-            Movie movie = new Movie(movieId, movieName, movieYear, movieGenre);
-            manager.addMovie(movie);
-            System.out.println("Movie added successfully !!");
+            while (true) {
+                String movieName = InputUtil.readString("Enter movie name: ");
+                int movieYear = InputUtil.readInt("Enter movie release year: ");
+                String movieGenre = InputUtil.readString("Enter movie genre: ");
+
+                MovieManager.addMovie(movieName, movieYear, movieGenre);
+                System.out.println("Movie added successfully!!");
+
+                if(!InputUtil.createNext()) break;
+
+            }
         } catch (CapacityFullException e) {
-            // Safety net (rare race condition)
             System.out.println(e.getMessage());
         }
     }
 
-
     private void displayMovies() {
-        if (manager.getMovies() == null || manager.getMovies().isEmpty()) {
+        if (MovieManager.getMovies() == null || MovieManager.getMovies().isEmpty()) {
             System.out.println("No movies found");
             return;
         }
-
         System.out.println("---- Movie List ----");
-        for (Movie movie : manager.getMovies()) {
+        for (Movie movie : MovieManager.getMovies()) {
             System.out.println(movie);
             System.out.println("--------------------");
         }
     }
 
+    private void deleteAllMovies() {
+        MovieManager.deleteAll();
+    }
 
-    private static void displayMenu(){
-        System.out.println("Movie Management System");
+    private void viewMovieById() {
+        try {
+            MovieManager.displayAllMovieIds();
+            int id = InputUtil.readInt("Enter movie ID to view: ");
 
-        System.out.println("1. Display Movies");
-        System.out.println("2. Add movies");
-        System.out.println("3. Delete All Movies");
-        System.out.println("4. Exit");
+            Movie movie = MovieManager.findMovieById(id);
+            System.out.println("---- Movie Details ----");
+            System.out.println(movie);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void updateMovieById() {
+        try {
+            MovieManager.displayAllMovieIds();
+            int id = InputUtil.readInt("Enter movie ID to update: ");
+
+            String newName = InputUtil.readString("Enter new movie name: ");
+            int newYear = InputUtil.readInt("Enter new release year: ");
+            String newGenre = InputUtil.readString("Enter new genre: ");
+
+            MovieManager.setMovieDetail(id, newName, newYear, newGenre);
+            System.out.println("Movie updated successfully");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void deleteMovieById() {
+        try {
+            MovieManager.displayAllMovieIds();
+            int id = InputUtil.readInt("Enter movie ID to delete: ");
+
+            MovieManager.deleteMovieById(id);
+            System.out.println("Movie deleted successfully");
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void saveMovieOnFile() {
+        MovieManager.saveMovies();
+        System.out.println("File Updated successfully");
+    }
+
+    private void  clearMovieList() {
+        MovieManager.clearMovies();
+        System.out.println("Movie List cleared successfully");
+    }
+
+    private void loadMovieFromList(){
+        MovieManager.loadMovies();
+        System.out.println("Movie List loaded successfully");
     }
 }

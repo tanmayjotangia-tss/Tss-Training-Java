@@ -17,6 +17,19 @@ public class Movie implements Serializable {
         return id;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+
     @Override
     public String toString() {
         String result = ("Id: " + id + "\nName: " + name + "\nYear: " + year + "\nGenre: " + genre);
