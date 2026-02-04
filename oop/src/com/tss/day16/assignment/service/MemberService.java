@@ -23,6 +23,7 @@ public class MemberService {
         Member member = new Member(name,email);
         memberList.put(member.getMemberId(), member);
         emailList.add(email);
+        System.out.println("Member added successfully!");
     }
 
     public static void displayAllMembers(){
@@ -37,7 +38,7 @@ public class MemberService {
     public static void displayMemberNumber(){
             System.out.println("-------Member Numbers--------");
             for(Member member : memberList.values()){
-                member.getMemberId();
+                System.out.println("- " + member.getMemberId());
             }
     }
 
@@ -56,6 +57,49 @@ public class MemberService {
         }
         return true;
     }
+
+    public static void displayMember(){
+        if(memberPresent()){
+            int memberId = selectMemberById();
+            Member member = memberList.get(memberId);
+            System.out.println(member);
+        }
+    }
+
+    public static void removeMember() {
+        if (!memberPresent()) {
+            return;
+        }
+        int memberId = selectMemberById();
+        Member removedMember = memberList.remove(memberId);
+
+        if (removedMember == null) {
+            System.out.println("Invalid member ID. No member removed.");
+            return;
+        }
+        emailList.remove(removedMember.getMemberEmail());
+        System.out.println("Member removed successfully!");
+    }
+
+    public static void displayMembersTable() {
+        if (!memberPresent()) return;
+
+        System.out.println("-----------------------------------------------------------");
+        System.out.printf("%-12s %-20s %-25s%n",
+                "Member ID", "Name", "Email");
+        System.out.println("-----------------------------------------------------------");
+
+        for (Member member : memberList.values()) {
+            System.out.printf("%-12d %-20s %-25s%n",
+                    member.getMemberId(),
+                    member.getMemberName(),
+                    member.getMemberEmail());
+        }
+
+        System.out.println("-----------------------------------------------------------");
+    }
+
+
 
     public static Map<Integer,Member> getMemberList(){
         return memberList;
