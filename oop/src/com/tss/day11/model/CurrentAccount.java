@@ -18,7 +18,7 @@ public class CurrentAccount extends Account{
                 throw new NegativeAmountException(amount);
             }
             double balanceBefore = getBalance();
-            setBalance(getBalance()+amount);
+            increaseBalance(amount);
             Transaction transaction = new Transaction("Deposit",0,getAccountNumber(),amount,balanceBefore,getBalance());
             addTransaction(transaction);
 
@@ -46,7 +46,7 @@ public class CurrentAccount extends Account{
                 if (balanceAfter < MIN_BALANCE) {
                     throw new MinimumBalanceException(balanceAfter);
                 }
-                setBalance(balanceAfter);
+                decreaseBalance(amount);
                 Transaction transaction = new Transaction("Withdraw",getAccountNumber(),0,amount,balanceBefore,getBalance());
                 addTransaction(transaction);
             }

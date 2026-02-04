@@ -224,14 +224,17 @@ public class BankAppUsingCollection {
                     }
                 }
 
-                sender.decreaseBalance(amount);
-                receiver.increaseBalance(amount);
+//                sender.decreaseBalance(amount);
+//                receiver.increaseBalance(amount);
 
-                Transaction senderTransaction = new Transaction("Transfer", sender.getAccountNumber(), receiver.getAccountNumber(),amount,senderBalanceBefore,sender.getBalance());
-                sender.addTransaction(senderTransaction);
+//                Transaction senderTransaction = new Transaction("Transfer", sender.getAccountNumber(), receiver.getAccountNumber(),amount,senderBalanceBefore,sender.getBalance());
+//                sender.addTransaction(senderTransaction);
+//
+//                Transaction recieverTransaction =new Transaction("Transfer", sender.getAccountNumber(), receiver.getAccountNumber(),amount,recieverBalanceBefore,receiver.getBalance());
+//                receiver.addTransaction(recieverTransaction);
 
-                Transaction recieverTransaction =new Transaction("Transfer", sender.getAccountNumber(), receiver.getAccountNumber(),amount,recieverBalanceBefore,receiver.getBalance());
-                receiver.addTransaction(recieverTransaction);
+                sender.withdraw(amount);
+                receiver.deposit(amount);
 
                 System.out.println("Transfer successful!");
                 break;

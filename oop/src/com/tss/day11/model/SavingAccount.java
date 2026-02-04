@@ -25,7 +25,7 @@ public class SavingAccount extends Account{
             finalAmount+=interest;
             System.out.println("Offer Interest Added: " + interest);
         }
-        setBalance(getBalance() +finalAmount);
+        increaseBalance(finalAmount);
 
         Transaction transaction = new Transaction("Deposit",0,getAccountNumber(),amount,balanceBefore,getBalance());
         addTransaction(transaction);
@@ -39,7 +39,7 @@ public class SavingAccount extends Account{
         }
         double balanceBefore=getBalance();
         if (amount <= getBalance()) {
-            setBalance(getBalance() - amount);
+            decreaseBalance(amount);
             Transaction transaction = new Transaction("Withdraw",getAccountNumber(),0,amount,balanceBefore,getBalance());
             addTransaction(transaction);
 //            System.out.println("Withdraw Successful");

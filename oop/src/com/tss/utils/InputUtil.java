@@ -95,4 +95,17 @@ public class InputUtil {
             }
         }
     }
+
+    public static String readEmail(String message) {
+        while (true) {
+            System.out.print(message);
+            String email = scanner.nextLine().trim();
+
+            if (email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                return email;
+            }
+            System.out.println("Invalid email address. Please enter a valid email.");
+        }
+    }
+
 }
